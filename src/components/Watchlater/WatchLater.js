@@ -18,15 +18,17 @@ function WatchLater() {
   const [{ token, userName }, dispatch] = useStateProvider();
   const [watchLater, setWatchlater] = useState([]);
 
-  const apiUrl = "https://academics.newtonschool.co/api/v1/ott/watchlist/like";
+ 
 
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    projectID: "f104bi07c490",
-  };
+  
   console.log(token);
 
   useEffect(() => {
+     const apiUrl = "https://academics.newtonschool.co/api/v1/ott/watchlist/like";
+    const headers = {
+    Authorization: `Bearer ${token}`,
+    projectID: "f104bi07c490",
+  };
     axios
       .get(apiUrl, { headers })
       .then((response) => {
@@ -36,7 +38,7 @@ function WatchLater() {
       .catch((error) => {
         console.log(error);
       });
-  }, [headers]);
+  }, []);
 
   const handleWatchLaterVideo = (obj) => {
     dispatch({ type: "SET_VIDEO", payload: obj });
