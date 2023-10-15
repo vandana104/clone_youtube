@@ -36,7 +36,7 @@ function WatchLater() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [headers]);
 
   const handleWatchLaterVideo = (obj) => {
     dispatch({ type: "SET_VIDEO", payload: obj });
