@@ -21,7 +21,6 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { useStateProvider } from "../../utils/StateProvider";
-import axios from "axios";
 
 function Header() {
   const navigate = useNavigate();

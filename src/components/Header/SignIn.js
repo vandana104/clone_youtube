@@ -123,12 +123,10 @@ function SignIn() {
         />
         <Link
           href="/signup"
-          color="text.primary"
           sx={{
             display: "block",
             marginBottom: "16px",
             textDecoration: "none",
-            color: "text.primary",
             marginTop: "4px",
             color: "#1679ba",
           }}>
@@ -144,12 +142,10 @@ function SignIn() {
         </Typography>
         <Link
           to="/"
-          color="text.primary"
           sx={{
             display: "block",
             marginBottom: "16px",
             textDecoration: "none",
-            color: "text.primary",
             marginTop: "4px",
             color: "#1679ba",
           }}>

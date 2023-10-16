@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import "./VideoDetail.css";
 import { Avatar, Typography, Button } from "@mui/material";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
@@ -44,7 +44,7 @@ function VideoDetail() {
     if (changedVideo) {
       dispatch({ type: "SET_VIDEO", payload: changedVideo });
     }
-  }, []);
+  }, [dispatch,selectedVideo._id]);
 
 
   const setDispatch = () => {
