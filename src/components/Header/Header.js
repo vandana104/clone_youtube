@@ -25,7 +25,7 @@ import axios from "axios";
 
 function Header() {
   const navigate = useNavigate();
-  const [{ sideBarToggle, userName }, dispatch] = useStateProvider();
+  const [{ sideBarToggle, userName, list }, dispatch] = useStateProvider();
   const [avatarMenuAnchorEl, setAvatarMenuAnchorEl] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 480);
@@ -67,36 +67,34 @@ function Header() {
   const handleLogOut = () => {
     dispatch({ type: "SET_TOKEN", payload: null });
     dispatch({ type: "SET_NAME", payload: "" });
+    localStorage.clear();
     navigate("/");
   };
 
   const handleChange = (e) => {
-    setSearchQuery(e.target.value);
-    console.log(e);
+    const searchValue = e.target.value.toLowerCase();
+    setSearchQuery(searchValue);
+    const updatedPost1 = list.filter((obj) =>
+      obj.title.toLowerCase().includes(searchValue),
+    );
+    const updatedPost2 = list.filter((obj) =>
+      obj.director.toLowerCase().includes(searchValue),
+    );
+    const result = updatedPost1.concat(updatedPost2);
+    console.log(result);
+    dispatch({ type: "SET_SEARCH_SONG", payload: result });
+    navigate("/suggestion");
+  };
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      console.log("entered");
+      handleInput(e);
+    }
+    // setSearchQuery(e.target.value);
   };
 
   const handleInput = async (e) => {
     e.preventDefault();
-    try {
-      let headersList = {
-        projectId: "f104bi07c490",
-      };
-
-      let reqOptions = {
-        url: `https://academics.newtonschool.co/api/v1/ott/show?title=${searchQuery}`,
-        method: "GET",
-        headers: headersList,
-      };
-
-      let response = await axios.request(reqOptions);
-      const songData = response.data.data; // Assuming the API returns an array of song data
-
-      console.log(songData);
-      dispatch({ type: "SET_SEARCH_SONG", payload: songData }); // Providing the Search data to global
-      navigate("/suggestion");
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const handleLongInput = () => {
@@ -141,6 +139,7 @@ function Header() {
               justifyContent: "center",
             }}>
             <Paper
+              onSubmit={(e) => e.preventDefault()}
               component="form"
               sx={{
                 display: "flex",
@@ -155,6 +154,7 @@ function Header() {
                 placeholder="Search"
                 value={searchQuery}
                 onChange={handleChange}
+                onKeyDown={handleSearch}
                 sx={{
                   flex: 1,
                   marginLeft: "16px",
@@ -231,6 +231,7 @@ function Header() {
                 justifyContent: "center",
               }}>
               <Paper
+                onSubmit={(e) => e.preventDefault()}
                 component="form"
                 sx={{
                   display: "flex",
@@ -245,6 +246,7 @@ function Header() {
                   placeholder="Search"
                   value={searchQuery}
                   onChange={handleChange}
+                  onKeyDown={handleSearch}
                   sx={{
                     flex: 1,
                     marginLeft: "16px",

@@ -18,6 +18,7 @@ function SignUp() {
   const [userData, setUserData] = useState({});
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confimrpassword, setconfimrpassword] = useState("");
   const [username, setUsername] = useState("");
 
   const handleClickShowPassword = () => {
@@ -41,7 +42,7 @@ function SignUp() {
     headers: headersList,
   };
 
-  const login = async () => {
+  const signup = async () => {
     try {
       let response = await axios.request(reqOptions);
       console.log(response);
@@ -51,7 +52,7 @@ function SignUp() {
         console.log(userData);
         alert("SuccessFully SignedUp");
         setTimeout(() => {
-          navigate("/login");
+          navigate("/signin");
         }, 2000);
       }
     } catch (error) {
@@ -74,7 +75,13 @@ function SignUp() {
 
     reqOptions.data = bodyContent;
 
-    login();
+    if (password.length >= 8 && password === confimrpassword) {
+      signup();
+    } else if (password !== confimrpassword) {
+      alert("Password is not matching!...");
+    } else {
+      alert("Please provide 8 or more characters");
+    }
   };
 
   return (
@@ -147,6 +154,9 @@ function SignUp() {
           <Box display="flex">
             <TextField
               // fullWidth
+              required
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
               margin="normal"
               label="Password"
               flex="1"
@@ -164,9 +174,9 @@ function SignUp() {
             />
             <Box m={0.5} />
             <TextField
-              value={password}
+              value={confimrpassword}
               required
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setconfimrpassword(e.target.value)}
               margin="normal"
               label=" Confirm Password"
               flex="1"

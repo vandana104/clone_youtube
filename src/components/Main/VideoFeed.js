@@ -13,7 +13,7 @@ function VideoFeed() {
 
   useEffect(() => {
     axios
-      .get(` https://academics.newtonschool.co/api/v1/ott/show`, {
+      .get(` https://academics.newtonschool.co/api/v1/ott/show?limit=100`, {
         headers: {
           projectId: projectId,
         },
@@ -33,6 +33,16 @@ function VideoFeed() {
 
   const handleVideoDetail = (video) => {
     dispatch({ type: "SET_VIDEO", payload: video });
+    var videocard = JSON.parse(localStorage.getItem("video")) || [];
+
+    const flag = videocard.some((card) => card._id === video._id);
+    console.log(flag);
+
+    if (!flag) {
+      const UpdatedVideo = [...videocard, video];
+      localStorage.setItem("video", JSON.stringify(UpdatedVideo));
+      console.log(videocard);
+    }
   };
   return (
     <Grid

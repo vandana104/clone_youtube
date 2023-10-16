@@ -55,6 +55,7 @@ function SideBar() {
 
   const handleNavigate = (str) => {
     console.log(str);
+    handleToggle();
     navigate(str);
   };
 

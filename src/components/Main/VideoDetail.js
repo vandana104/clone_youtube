@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./VideoDetail.css";
 import { Avatar, Typography, Button } from "@mui/material";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
@@ -7,32 +7,54 @@ import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import { useStateProvider } from "../../utils/StateProvider";
 import axios from "axios";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function VideoDetail() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [{ selectedVideo, list, token }, dispatch] = useStateProvider();
-
   const randomArr = Math.floor(Math.random() * 4);
   var endIndex = randomArr * 20 + 19;
   const displayedList = list.slice((0 + randomArr) * 19, endIndex);
 
-  useEffect(() => {
-    // console.log("displayedList", displayedList);
-  }, [displayedList]);
   const subscribeNum = Math.floor(Math.random() * 10) + 1;
-  const likeNum = Math.floor(Math.random() * 1000) + 1;
   let viewNum;
   let hoursNum;
 
   const handleVideoDetail = (obj) => {
+    var videocard = JSON.parse(localStorage.getItem("video")) || [];
+    const flag = videocard.some((card) => card._id === obj._id);
+    console.log(flag);
+    if (!flag) {
+      const UpdatedVideo = [...videocard, obj];
+      localStorage.setItem("video", JSON.stringify(UpdatedVideo));
+    }
+
     setTimeout(() => {
       dispatch({ type: "SET_VIDEO", payload: obj });
-      // console.log(obj);
-      console.log("selectedVideo", selectedVideo);
+      navigate("/");
+      navigate("/detail");
+      console.log("obj", obj);
     }, 1000);
   };
 
+  useEffect(() => {
+    const videocard = JSON.parse(localStorage.getItem("video")) || [];
+    const changedVideo = videocard.find((obj) => obj._id === selectedVideo._id);
+    console.log("find", changedVideo);
+    if (changedVideo) {
+      dispatch({ type: "SET_VIDEO", payload: changedVideo });
+    }
+  }, []);
+
+
+  const setDispatch = () => {
+    const videocard = JSON.parse(localStorage.getItem("video")) || [];
+    const index = videocard.findIndex((obj) => obj._id === selectedVideo._id);
+    videocard[index] = selectedVideo;
+    // console.log("updated", videocard);
+    localStorage.setItem("video", JSON.stringify(videocard));
+    dispatch({ type: "SET_VIDEO", payload: selectedVideo });
+  };
   const handleWatchLater = () => {
     if (token === null) {
       console.log(token);
@@ -60,13 +82,16 @@ function VideoDetail() {
           if (
             response.data.message === "Show added to watchlist successfully."
           ) {
+            selectedVideo.watchLater = true;
             alert("Show added to watchlist successfully.");
           } else if (
             response.data.message ===
             "Show removed from watchlist successfully."
           ) {
+            selectedVideo.watchLater = false;
             alert("Show removed from watchlist successfully.");
           }
+          setDispatch();
         })
         .catch((error) => {
           console.error("Error making PATCH request:", error);
@@ -75,18 +100,49 @@ function VideoDetail() {
       console.log(token);
     }
   };
+
+  const handleLike = () => {
+    if (selectedVideo?.liked) {
+      selectedVideo.liked = false;
+    } else {
+      selectedVideo.liked = true;
+    }
+    setDispatch();
+  };
+
+  const handleDislike = () => {
+    if (selectedVideo?.liked) {
+      selectedVideo.liked = false;
+    }
+
+    if (selectedVideo?.dislike) {
+      selectedVideo.dislike = false;
+    } else {
+      selectedVideo.dislike = true;
+    }
+    setDispatch();
+  };
+  const handleSubscribe = () => {
+    if (selectedVideo?.subscribe) {
+      selectedVideo.subscribe = false;
+    } else {
+      selectedVideo.subscribe = true;
+    }
+    setDispatch();
+  };
+
   return (
     <div className="main-body">
       <div className="primary-section">
         <video loop controls style={{ width: "100%" }}>
-          <source src={selectedVideo.video_url} />
+          <source src={selectedVideo?.video_url} />
         </video>
         <h3
           style={{
             fontFamily: "Roboto, Arial, sans-serif",
             margin: "12px 0px 12px 0px",
           }}>
-          {selectedVideo.title + " : " + selectedVideo.description}
+          {selectedVideo?.title + " : " + selectedVideo?.description}
         </h3>
         <div className="video_footer">
           <div style={{ display: "flex", alignItems: "center", width: "700" }}>
@@ -95,46 +151,48 @@ function VideoDetail() {
                 width: 35,
                 height: 35,
               }}
-              src={selectedVideo.thumbnail}
+              src={selectedVideo?.thumbnail}
               alt="User Avatar"
             />
             <div style={{ paddingLeft: "15px" }}>
               <Typography sx={{ color: "Black" }}>
-                {selectedVideo.director}
+                {selectedVideo?.director}
               </Typography>
               <Typography sx={{ color: "gray", fontSize: "13px" }}>
                 {subscribeNum}M subscribers
               </Typography>
             </div>
             <Button
-              variant="contained"
+              variant={selectedVideo?.subscribe ? "outlined" : "contained"}
               size="medium"
-              sx={{
+              onClick={handleSubscribe}
+              style={{
                 height: "38px",
                 borderRadius: "40px",
-                backgroundColor: "black",
                 textTransform: "none",
                 marginLeft: "10px",
               }}>
-              Subscribe
+              {selectedVideo?.subscribe ? "Unsubscribe" : "Subscribe"}
             </Button>
           </div>
           <div className="button-group">
             <Button
+              onClick={handleLike}
               className="button-style"
-              sx={{
-                color: "black",
+              style={{
+                color: selectedVideo?.liked ? "blue" : "black",
                 background: "#e4e5eb",
                 marginLeft: "2px",
               }}>
               {/* need  to add gaps bet buttons */}
               <ThumbUpOffAltIcon />
-              {likeNum}
+              {selectedVideo?.liked ? 1 : 0}
             </Button>
             <Button
+              onClick={handleDislike}
               className="button-style"
-              sx={{
-                color: "black",
+              style={{
+                color: selectedVideo?.dislike ? "blue" : "black",
                 background: "#e4e5eb",
                 marginLeft: "2px",
               }}>

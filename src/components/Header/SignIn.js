@@ -7,11 +7,6 @@ import Grid from "@mui/material/Grid";
 import axios from "axios";
 import { useStateProvider } from "../../utils/StateProvider";
 import { useNavigate } from "react-router-dom";
-// import Stack from '@mui/material/Stack';
-
-// import InputLabel from '@mui/material/InputLabel';
-// import FormControl from '@mui/material/FormControl';
-// import NativeSelect from '@mui/material/NativeSelect';
 
 function SignIn() {
   const [, dispatch] = useStateProvider();
@@ -70,31 +65,38 @@ function SignIn() {
     login();
   };
   return (
-    <Container maxWidth="sm" sx={{ marginTop: "4rem" }}>
+    <Container maxWidth="sm" sx={{ marginTop: "55px", width: "500px" }}>
       <Box
         sx={{
           border: "1px solid #E0E0E0",
           borderRadius: "8px",
-          padding: "2rem",
-          height: "32rem",
+          padding: "32px",
+          height: "550px",
         }}>
-        <Typography
-          variant="h4"
+        <Box
           sx={{
-            color: "googleRed",
-            paddingTop: "2rem",
-            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}>
-          Google
-        </Typography>
+          <img
+            src="https://logodownload.org/wp-content/uploads/2014/09/google-logo-1.png"
+            style={{
+              width: "100px",
+              height: "30px",
+              marginTop: "25px",
+            }}
+            alt="Googleimage"
+          />
+        </Box>
         <Typography
           variant="h5"
-          sx={{ paddingTop: "1rem", textAlign: "center" }}>
+          sx={{ paddingTop: "16px", textAlign: "center" }}>
           Sign In
         </Typography>
         <Typography
           variant="body1"
-          sx={{ paddingTop: "1rem", textAlign: "center" }}>
+          sx={{ paddingTop: "16px", textAlign: "center" }}>
           to continue on YouTube
         </Typography>
         <TextField
@@ -105,7 +107,7 @@ function SignIn() {
             setEmail(e.target.value);
           }}
           sx={{
-            marginTop: "2.5rem",
+            marginTop: "40px",
           }}
         />
         <TextField
@@ -116,7 +118,7 @@ function SignIn() {
             setPassword(e.target.value);
           }}
           sx={{
-            marginTop: "2.5rem",
+            marginTop: "40px",
           }}
         />
         <Link
@@ -124,17 +126,18 @@ function SignIn() {
           color="text.primary"
           sx={{
             display: "block",
-            marginBottom: "1rem",
+            marginBottom: "16px",
             textDecoration: "none",
             color: "text.primary",
-            marginTop: "0.25rem",
+            marginTop: "4px",
+            color: "#1679ba",
           }}>
           Forgot email?
         </Link>
         <Typography
           variant="body2"
           sx={{
-            paddingTop: "1rem",
+            paddingTop: "16px",
             color: "gray",
           }}>
           Not your computer? Use Guest mode to sign in privately.
@@ -144,10 +147,11 @@ function SignIn() {
           color="text.primary"
           sx={{
             display: "block",
-            marginBottom: "1rem",
+            marginBottom: "16px",
             textDecoration: "none",
             color: "text.primary",
-            marginTop: "0.25rem",
+            marginTop: "4px",
+            color: "#1679ba",
           }}>
           Learn more
         </Link>
@@ -156,7 +160,10 @@ function SignIn() {
             item
             sx={{
               display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
               alignItems: "center",
+              flex: "1",
             }}>
             <Link
               href="/signup"
@@ -164,16 +171,15 @@ function SignIn() {
               sx={{
                 textDecoration: "none",
                 cursor: "pointer",
+                color: "#1679ba",
               }}>
-              Create an Account SignUp
+              Create an Account
             </Link>
             <Button
               variant="contained"
               size="medium"
               onClick={handleLogin}
-              sx={{
-                marginLeft: "20rem",
-              }}>
+              sx={{}}>
               Next
             </Button>
           </Grid>

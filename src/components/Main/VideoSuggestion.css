@@ -1,6 +1,5 @@
 .suggestion{
     display: flex;
-    justify-content: center;
     width: 652px;
     height: 220px;
     cursor: pointer;
@@ -36,5 +35,3 @@
         width: 365px;
     }
    }
-
-   
